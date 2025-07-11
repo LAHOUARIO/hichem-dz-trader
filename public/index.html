@@ -10,10 +10,12 @@
       padding: 0;
       height: 100%;
       font-family: 'Segoe UI', sans-serif;
+      color: white;
       background: url('background.jpg') no-repeat center center fixed;
       background-size: cover;
-      color: white;
+      position: relative;
     }
+
     body::before {
       content: "";
       position: fixed;
@@ -21,140 +23,120 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0, 0, 0, 0.8);
+      background: rgba(0, 0, 0, 0.95); /* زيادة العتمة */
       z-index: 0;
     }
 
-    #splashScreen {
-      position: fixed;
-      top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0, 0, 0, 0.95);
+    .screen {
+      display: none;
+      height: 100vh;
+      width: 100%;
+      position: relative;
+      z-index: 1;
       display: flex;
       flex-direction: column;
-      justify-content: center;
       align-items: center;
-      z-index: 9999;
+      justify-content: center;
       text-align: center;
-    }
-    #splashScreen h1 {
-      color: #facc15;
-      font-size: 32px;
-      margin-bottom: 10px;
-    }
-    #splashScreen p {
-      font-size: 20px;
-      margin: 5px 0;
-    }
-    #splashScreen a {
-      font-size: 22px;
-      font-weight: bold;
-      color: #58a6ff;
-      text-decoration: none;
-      margin-top: 20px;
-    }
-    #countdown {
-      font-size: 28px;
-      margin-top: 20px;
-      color: #22c55e;
+      padding: 20px;
     }
 
-    #loginScreen {
-      display: none;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      z-index: 2;
-      position: relative;
-      background-color: rgba(0, 0, 0, 0.6);
-      padding: 40px;
-      margin: 20px;
-      border-radius: 16px;
-      box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
-      text-align: center;
+    .visible {
+      display: flex !important;
     }
-    #loginScreen input {
-      padding: 10px;
-      font-size: 16px;
-      border-radius: 6px;
-      border: none;
-      background-color: #161b22;
+
+    .telegram {
+      font-size: 18px;
+      margin-top: 15px;
+      background: #0088cc;
+      padding: 12px 20px;
+      border-radius: 10px;
       color: white;
-      margin-bottom: 10px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: background 0.3s;
     }
-    #loginScreen button {
-      padding: 10px 20px;
-      font-size: 16px;
+
+    .telegram:hover {
+      background: #006699;
+    }
+
+    #countdown {
+      font-size: 24px;
+      margin-top: 20px;
+      color: #facc15;
+    }
+
+    input, button {
+      padding: 10px;
+      margin-top: 10px;
       border-radius: 6px;
       border: none;
-      background-color: #238636;
+      font-size: 16px;
+    }
+
+    input {
+      background: #222;
+      color: white;
+    }
+
+    button {
+      background: #238636;
       color: white;
       cursor: pointer;
-    }
-    .extra-msg {
-      margin-top: 20px;
-      line-height: 1.8;
-    }
-    .extra-msg div {
-      font-size: 18px;
-    }
-    .extra-msg .friday {
-      font-weight: bold;
-      color: #22c55e;
     }
   </style>
 </head>
 <body>
 
-  <div id="splashScreen">
-    <h1>HICHEM DZ BOT PRO</h1>
-    <p>اللهم صل وسلم على سيدنا محمد ﷺ</p>
-    <p>لا تنسوا الصلاة على النبي ❤️</p>
-    <div class="extra-msg">
-      <div class="friday" id="fridayMessage"></div>
-    </div>
-    <a href="https://t.me/HichemDzTrader" target="_blank">📢 شاركونا عبر تيليغرام</a>
+  <!-- شاشة البداية -->
+  <div id="splashScreen" class="screen visible">
+    <h1>✨ HICHEM DZ BOT PRO</h1>
+    <p>اللهم صل وسلم على سيدنا محمد</p>
+    <p>لا تنسوا الصلاة على النبي ﷺ</p>
+    <p id="fridayMessage" style="margin-top:10px; color:#0ff; font-weight:bold;"></p>
+    <a class="telegram" href="https://t.me/HichemDzTrader" target="_blank">📢 شاركونا عبر التليغرام</a>
     <div id="countdown">10</div>
   </div>
 
-  <div id="loginScreen">
-    <h2>🔐 أدخل كلمة المرور للمتابعة</h2>
+  <!-- شاشة إدخال كلمة السر -->
+  <div id="loginScreen" class="screen">
+    <h2>أدخل كلمة المرور</h2>
     <input type="password" id="passwordInput" placeholder="كلمة المرور" />
-    <button onclick="checkPassword()">✅ دخول</button>
+    <button onclick="checkPassword()">دخول</button>
   </div>
 
   <script>
     const PASSWORD = "HMDZ1969@";
 
-    // العد التنازلي
+    function checkPassword() {
+      const input = document.getElementById("passwordInput").value;
+      if (input === PASSWORD) {
+        alert("✅ تم الدخول بنجاح!");
+      } else {
+        alert("❌ كلمة المرور غير صحيحة!");
+      }
+    }
+
+    // رسالة الجمعة
+    const day = new Date().getDay();
+    if (day === 5) {
+      document.getElementById("fridayMessage").textContent = "🌙 جمعة مباركة";
+    }
+
+    // عد تنازلي 10 ثواني
     let seconds = 10;
     const countdown = document.getElementById("countdown");
+
     const interval = setInterval(() => {
       seconds--;
       countdown.textContent = seconds;
       if (seconds <= 0) {
         clearInterval(interval);
-        document.getElementById("splashScreen").style.display = "none";
-        document.getElementById("loginScreen").style.display = "flex";
+        document.getElementById("splashScreen").classList.remove("visible");
+        document.getElementById("loginScreen").classList.add("visible");
       }
     }, 1000);
-
-    // جمعة مباركة فقط يوم الجمعة
-    const today = new Date().getDay();
-    if (today === 5) {
-      const msg = document.getElementById("fridayMessage");
-      if (msg) msg.textContent = "🌙 جمعة مباركة 🌙";
-    }
-
-    function checkPassword() {
-      const input = document.getElementById("passwordInput").value;
-      if (input === PASSWORD) {
-        alert("✅ تم الدخول بنجاح!");
-        // هنا يمكنك عرض المحتوى الحقيقي لاحقًا
-      } else {
-        alert("كلمة المرور غير صحيحة!");
-      }
-    }
   </script>
 </body>
 </html>
