@@ -37,6 +37,12 @@
       height: 100vh;
       z-index: 2;
       position: relative;
+      text-align: center;
+    }
+    #loginScreen h2 {
+      color: #facc15;
+      font-size: 26px;
+      margin-bottom: 20px;
     }
     #loginScreen input {
       padding: 10px;
@@ -55,6 +61,34 @@
       background-color: #238636;
       color: white;
       cursor: pointer;
+    }
+    .blessings {
+      margin-top: 30px;
+      line-height: 1.8;
+    }
+    .blessings .main {
+      font-size: 20px;
+      color: #facc15;
+      font-weight: bold;
+    }
+    .blessings .note {
+      color: #ccc;
+      font-size: 16px;
+    }
+    .blessings .friday {
+      margin-top: 10px;
+      font-size: 18px;
+      color: #22c55e;
+      font-weight: bold;
+    }
+    .telegram-link {
+      margin-top: 40px;
+    }
+    .telegram-link a {
+      text-decoration: none;
+      font-size: 22px;
+      font-weight: bold;
+      color: #58a6ff;
     }
     header {
       background-color: rgba(22, 27, 34, 0.85);
@@ -135,9 +169,19 @@
 </head>
 <body>
   <div id="loginScreen">
-    <h2>أدخل كلمة المرور</h2>
+    <h2>🔐 أدخل كلمة المرور للمتابعة</h2>
     <input type="password" id="passwordInput" placeholder="كلمة المرور" />
-    <button onclick="checkPassword()">دخول</button>
+    <button onclick="checkPassword()">✅ دخول</button>
+
+    <div class="blessings">
+      <div class="main">اللهم صل وسلم على سيدنا محمد ﷺ</div>
+      <div class="note">لا تنسوا الصلاة على النبي ❤️</div>
+      <div class="friday" id="fridayMessage"></div>
+    </div>
+
+    <div class="telegram-link">
+      <a href="https://t.me/HichemDzTrader" target="_blank">📢 شاركونا عبر الرابط على تيليغرام</a>
+    </div>
   </div>
 
   <div id="mainContent">
@@ -207,7 +251,6 @@
     async function generateSignal() {
       const pair = document.getElementById("pair").value;
       const timeframe = document.getElementById("timeframe").value;
-      const timeStr = getNextCandleTime(parseInt(timeframe));
 
       try {
         const response = await fetch("/analyze", {
@@ -241,6 +284,12 @@
         alert("⚠️ فشل الاتصال بالسيرفر");
         console.error(err);
       }
+    }
+
+    // عرض "جمعة مباركة" فقط يوم الجمعة
+    const today = new Date().getDay(); // 5 = الجمعة
+    if (today === 5) {
+      document.getElementById("fridayMessage").textContent = "🌙 جمعة مباركة 🌙";
     }
   </script>
 </body>
